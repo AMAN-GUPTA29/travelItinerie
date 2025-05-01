@@ -1,3 +1,20 @@
+/**
+ * index.css
+ * 
+ * Global styles for the application.
+ * 
+ * @module
+ * @description
+ * This file contains:
+ * - Tailwind CSS directives
+ * - Global styles and resets
+ * - Custom utility classes
+ * - Theme configuration
+ * 
+ * @example
+ * // These styles are automatically applied to the entire application
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

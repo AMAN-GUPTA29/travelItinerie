@@ -1,3 +1,33 @@
+/**
+ * ItineraryModal.jsx
+ * 
+ * Modal component for displaying detailed itinerary information.
+ * 
+ * @component
+ * @description
+ * This component:
+ * - Displays a modal with detailed itinerary information
+ * - Shows a day-by-day breakdown of activities
+ * - Includes:
+ *   - Title and description
+ *   - Region and duration
+ *   - Daily activities with times and descriptions
+ *   - Transfer information
+ * - Handles modal open/close functionality
+ * 
+ * @props
+ * @property {boolean} isOpen - Controls modal visibility
+ * @property {Function} onClose - Callback for closing the modal
+ * @property {Object} itinerary - The itinerary data to display
+ * 
+ * @example
+ * <ItineraryModal
+ *   isOpen={isModalOpen}
+ *   onClose={() => setIsModalOpen(false)}
+ *   itinerary={selectedItinerary}
+ * />
+ */
+
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';

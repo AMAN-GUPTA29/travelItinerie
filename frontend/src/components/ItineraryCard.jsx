@@ -1,3 +1,32 @@
+/**
+ * ItineraryCard.jsx
+ * 
+ * Card component for displaying an itinerary summary.
+ * 
+ * @component
+ * @description
+ * Displays a card with:
+ * - Region-specific background image
+ * - Itinerary title
+ * - Description (truncated to 2 lines)
+ * - Duration in days
+ * - View Details button
+ * 
+ * @props
+ * @property {Object} itinerary - The itinerary data to display
+ * @property {string} itinerary.title - The title of the itinerary
+ * @property {string} itinerary.description - The description of the itinerary
+ * @property {string} itinerary.region - The region of the itinerary
+ * @property {Array} itinerary.days - Array of days in the itinerary
+ * @property {Function} onViewDetails - Callback function when View Details is clicked
+ * 
+ * @example
+ * <ItineraryCard 
+ *   itinerary={itineraryData}
+ *   onViewDetails={() => handleViewDetails(itineraryData)}
+ * />
+ */
+
 import { getImageForRegion } from '../utils/imageUtils';
 
 const ItineraryCard = ({ itinerary, onViewDetails }) => {

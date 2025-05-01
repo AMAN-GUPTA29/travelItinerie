@@ -1,3 +1,29 @@
+/**
+ * ItineraryDetailPage.jsx
+ * 
+ * Page component for displaying detailed itinerary information.
+ * 
+ * @component
+ * @description
+ * This component:
+ * - Fetches and displays detailed itinerary information
+ * - Shows a comprehensive day-by-day breakdown
+ * - Includes:
+ *   - Title and description
+ *   - Region and duration
+ *   - Daily activities with times and descriptions
+ *   - Transfer information
+ * - Handles loading and error states
+ * 
+ * @state
+ * @property {Object} itinerary - The itinerary data
+ * @property {boolean} isLoading - Loading state
+ * @property {Error} error - Error state
+ * 
+ * @example
+ * <ItineraryDetailPage />
+ */
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getItineraryById } from '../../api/itineraryApi';

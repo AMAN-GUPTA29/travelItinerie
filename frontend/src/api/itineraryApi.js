@@ -1,3 +1,27 @@
+/**
+ * itineraryApi.js
+ * 
+ * API functions for interacting with the itinerary backend.
+ * 
+ * @module
+ * @description
+ * This module provides functions to:
+ * - Fetch all itineraries
+ * - Fetch a specific itinerary by ID
+ * - Create a new itinerary
+ * - Fetch recommended itineraries by duration
+ * 
+ * All functions handle error cases and provide appropriate error messages.
+ */
+
+/**
+ * Fetches all itineraries from the API.
+ * 
+ * @async
+ * @function getItineraries
+ * @returns {Promise<Array>} Array of itinerary objects
+ * @throws {Error} If the API request fails
+ */
 export const getItineraries = async () => {
   const response = await fetch('http://127.0.0.1:8000/api/v1/itineraries/');
   
@@ -8,6 +32,15 @@ export const getItineraries = async () => {
   return response.json();
 };
 
+/**
+ * Fetches a specific itinerary by its ID.
+ * 
+ * @async
+ * @function getItineraryById
+ * @param {string|number} id - The ID of the itinerary to fetch
+ * @returns {Promise<Object>} The itinerary object
+ * @throws {Error} If the API request fails
+ */
 export const getItineraryById = async (id) => {
   const response = await fetch(`http://127.0.0.1:8000/api/v1/itineraries/${id}`);
   
@@ -18,9 +51,18 @@ export const getItineraryById = async (id) => {
   return response.json();
 };
 
+/**
+ * Creates a new itinerary.
+ * 
+ * @async
+ * @function createItinerary
+ * @param {Object} itineraryData - The itinerary data to create
+ * @returns {Promise<Object>} The created itinerary object
+ * @throws {Error} If the API request fails or validation errors occur
+ */
 export const createItinerary = async (itineraryData) => {
   try {
-    console.log('Sending data:', JSON.stringify(itineraryData, null, 2)); // Pretty print the data
+    console.log('Sending data:', JSON.stringify(itineraryData, null, 2));
     
     const response = await fetch('http://127.0.0.1:8000/api/v1/itineraries/', {
       method: 'POST',
@@ -34,9 +76,8 @@ export const createItinerary = async (itineraryData) => {
     const data = await response.json();
     
     if (!response.ok) {
-      console.error('Error response:', JSON.stringify(data, null, 2)); // Pretty print the error
+      console.error('Error response:', JSON.stringify(data, null, 2));
       if (response.status === 422) {
-        // Handle validation errors
         const errorMessage = data.detail || 'Validation error';
         const validationErrors = data.errors || {};
         throw new Error(JSON.stringify({ message: errorMessage, errors: validationErrors }));
@@ -44,7 +85,7 @@ export const createItinerary = async (itineraryData) => {
       throw new Error(data.detail || 'Failed to create itinerary');
     }
 
-    console.log('Success response:', JSON.stringify(data, null, 2)); // Pretty print the success
+    console.log('Success response:', JSON.stringify(data, null, 2));
     return data;
   } catch (error) {
     console.error('API Error:', error);
@@ -52,6 +93,15 @@ export const createItinerary = async (itineraryData) => {
   }
 };
 
+/**
+ * Fetches recommended itineraries for a specific duration.
+ * 
+ * @async
+ * @function getRecommendedItineraries
+ * @param {number} days - The number of days for the recommendation
+ * @returns {Promise<Array>} Array of recommended itinerary objects
+ * @throws {Error} If the API request fails
+ */
 export const getRecommendedItineraries = async (days) => {
   try {
     console.log('Fetching recommendations for days:', days);

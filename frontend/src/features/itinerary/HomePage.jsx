@@ -1,3 +1,29 @@
+/**
+ * HomePage.jsx
+ * 
+ * Main page component that displays the list of itineraries and recommendation search.
+ * 
+ * @component
+ * @description
+ * This component:
+ * - Displays the hero section
+ * - Shows a list of itineraries in a grid layout
+ * - Provides functionality to:
+ *   - Add new itineraries
+ *   - Search for recommended itineraries by duration
+ *   - View itinerary details
+ * - Handles loading and error states
+ * 
+ * @state
+ * @property {Object} selectedItinerary - Currently selected itinerary for viewing details
+ * @property {boolean} isAddModalOpen - Controls visibility of add itinerary modal
+ * @property {number} recommendedDays - Number of days for recommendation search
+ * @property {boolean} showRecommended - Controls whether to show recommended itineraries
+ * 
+ * @example
+ * <HomePage />
+ */
+
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getItineraries, getRecommendedItineraries } from '../../api/itineraryApi';

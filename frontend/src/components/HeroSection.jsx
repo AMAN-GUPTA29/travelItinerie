@@ -1,3 +1,21 @@
+/**
+ * HeroSection.jsx
+ * 
+ * Hero section component for the main landing page.
+ * 
+ * @component
+ * @description
+ * Displays a hero section with:
+ * - Main heading
+ * - Subheading
+ * - Background styling
+ * 
+ * @example
+ * <HeroSection />
+ */
+
+import React from 'react';
+
 const HeroSection = () => {
   return (
     <div 
