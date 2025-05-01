@@ -59,6 +59,29 @@ const AddItineraryModal = ({ isOpen, onClose }) => {
         if (!activity.start_time) newErrors[`activity_start_${dayIndex}_${activityIndex}`] = 'Start time is required';
         if (!activity.end_time) newErrors[`activity_end_${dayIndex}_${activityIndex}`] = 'End time is required';
       });
+
+      // Validate transfers
+      day.transfers.forEach((transfer, transferIndex) => {
+        if (transfer.transfer_type && transfer.from_location && transfer.to_location) {
+          if (!transfer.departure_time) {
+            newErrors[`departure_time_${dayIndex}_${transferIndex}`] = 'Departure time is required';
+          }
+          if (!transfer.arrival_time) {
+            newErrors[`arrival_time_${dayIndex}_${transferIndex}`] = 'Arrival time is required';
+          }
+          if (transfer.departure_time && transfer.arrival_time) {
+            const departure = new Date(transfer.departure_time);
+            const arrival = new Date(transfer.arrival_time);
+            if (arrival <= departure) {
+              newErrors[`arrival_time_${dayIndex}_${transferIndex}`] = 'Arrival time must be after departure time';
+            }
+          }
+          // Validate transfer type
+          if (!transferTypes.includes(transfer.transfer_type.toLowerCase())) {
+            newErrors[`transfer_type_${dayIndex}_${transferIndex}`] = `Transfer type must be one of: ${transferTypes.join(', ')}`;
+          }
+        }
+      });
     });
 
     setErrors(newErrors);
@@ -79,8 +102,8 @@ const AddItineraryModal = ({ isOpen, onClose }) => {
       try {
         // Clean up the data before sending
         const cleanedData = {
-          title: formData.title,
-          description: formData.description,
+          title: formData.title.trim(),
+          description: formData.description.trim(),
           total_nights: parseInt(formData.total_nights),
           region: formData.region,
           price: parseFloat(formData.price),
@@ -88,17 +111,17 @@ const AddItineraryModal = ({ isOpen, onClose }) => {
           days: formData.days.map(day => ({
             day_number: day.day_number,
             accommodations: day.accommodations.map(acc => ({
-              name: acc.name,
-              description: acc.description,
+              name: acc.name.trim(),
+              description: acc.description.trim(),
               check_in_time: acc.check_in_time,
               check_out_time: acc.check_out_time
             })),
             activities: day.activities.map(activity => ({
-              name: activity.name,
-              description: activity.description,
+              name: activity.name.trim(),
+              description: activity.description.trim(),
               start_time: activity.start_time,
               end_time: activity.end_time,
-              location: activity.location
+              location: activity.location.trim()
             })),
             transfers: day.transfers.filter(transfer => 
               transfer.transfer_type && 
@@ -106,22 +129,37 @@ const AddItineraryModal = ({ isOpen, onClose }) => {
               transfer.to_location && 
               transfer.departure_time && 
               transfer.arrival_time
-            ).map(transfer => ({
-              from_location: transfer.from_location,
-              to_location: transfer.to_location,
-              transfer_type: transfer.transfer_type,
-              departure_time: transfer.departure_time,
-              arrival_time: transfer.arrival_time
-            }))
+            ).map(transfer => {
+              // Ensure dates are properly formatted
+              const departure = new Date(transfer.departure_time);
+              const arrival = new Date(transfer.arrival_time);
+              
+              return {
+                from_location: transfer.from_location.trim(),
+                to_location: transfer.to_location.trim(),
+                transfer_type: transfer.transfer_type.toLowerCase(), // Convert to lowercase
+                departure_time: departure.toISOString(),
+                arrival_time: arrival.toISOString()
+              };
+            })
           }))
         };
         
-        console.log('Sending data:', cleanedData);
+        console.log('Submitting form data:', cleanedData);
         await mutation.mutateAsync(cleanedData);
         onClose();
       } catch (error) {
         console.error('Error creating itinerary:', error);
-        // You might want to show an error message to the user here
+        try {
+          const errorData = JSON.parse(error.message);
+          if (errorData.errors) {
+            setErrors(errorData.errors);
+          } else {
+            setErrors({ submit: errorData.message || 'Failed to create itinerary' });
+          }
+        } catch (e) {
+          setErrors({ submit: error.message || 'Failed to create itinerary' });
+        }
       }
     }
   };
